@@ -1,0 +1,26 @@
+.navbar-static-top{
+  background: #f7f7f7;
+}
+.navbar-static-top li{
+  margin:3px 0px 0px 3px;
+}
+.navbar-static-top .active a{
+  background:#fff !important;
+}
+.main-if-close{
+  display:none;
+  position: absolute;
+  top: 0;
+  right: 5px;
+}
+.main-if-refresh{
+  display:none;
+  position: absolute;
+  top: 26px;
+  right: 5px;
+  font-size: 13px;
+}
+#content-nav a{
+  padding-left:15px;
+  padding-right:25px;
+}

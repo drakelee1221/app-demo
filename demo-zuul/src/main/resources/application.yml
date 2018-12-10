@@ -1,0 +1,12 @@
+server:
+  #见 io.undertow.Undertow.Builder
+  undertow:
+    direct-buffers: true
+
+
+info:
+  app:
+    name: ${spring.application.name}
+    version: '@project.version@'
+    project: '@current.project.name@'
+    description: This is ${spring.application.name} server

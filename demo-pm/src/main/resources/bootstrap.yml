@@ -1,0 +1,82 @@
+# security
+actuator:
+  user:
+    name: '@base.actuator.user.name@'
+    password: '@base.actuator.user.password@'
+
+management:
+  endpoints:
+    enabled-by-default: true
+    web:
+      exposure:
+        include: "*"
+      base-path: ""
+  endpoint:
+    health:
+      show-details: ALWAYS
+
+eureka-zones-default-has-blanks: '@eureka.zones.default@'
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: '${eureka-zones-default-trim-blanks:eureka-zones-default-has-blanks}'
+  instance:
+    status-page-url-path: "${management.endpoints.web.base-path}/info"
+    health-check-url-path: "${management.endpoints.web.base-path}/health"
+    instance-id: '${spring.cloud.client.hostname}~${spring.application.name}-${spring.application.instance_id:${server.port}}'
+    preferIpAddress: true
+    metadata-map:
+      fuzzy.boot.path: '${fuzzy.boot.path:}'
+      #actuator 用户信息 用于boot admin server监控调用
+      user.name: '${actuator.user.name}'
+      user.password: '${actuator.user.password}'
+      #用于turbine分组聚合统计
+      turbine-cluster: "feign"
+      #-------[RPC负载调用规则：Tag分组调用]--------
+      group-tag-filter-rule-enable: true
+      #当前节点分组过滤标签，多个以英文逗号隔开，默认为空
+      group-tag-filter-rule-tags: "@rpc.groupTagFilterRuleTags@"
+      #当前节点分组过滤标签为空时，是否限制调用其它有标签的节点，
+      #true=限制只能调用其它标签为空的节点，false=不做任何限制
+      group-tag-filter-rule-no-tags-limit: true
+      #-------[RPC负载调用规则：Tag分组调用]--------
+
+
+spring:
+  application:
+    name: '@project.artifactId@'
+  profiles:
+    active: '@build.profiles.active@'
+  cloud.config:
+    fail-fast: false #为TRUE时，重启操作会寻找spring.cloud.config.uri路径中本地配置中心，最终会重启失败
+    username: ${actuator.user.name}
+    password: ${actuator.user.password}
+    label: '@git.branches@'
+    name: '@config.prefix.name@'
+    profile: >-
+      pm-@build.profiles.active@,
+      comm-@build.profiles.active@,
+      jackson,
+      module,
+      jpa,
+      cache,
+      edge-captcha,
+      user-names,
+      pm-wechat-@build.profiles.active@,
+      sms-@build.profiles.active@,
+      zipkin-client-@build.profiles.active@,
+      rpc-tx-@build.profiles.active@,
+      pm-alipay-@build.profiles.active@,
+      edge-oss-qiniu-@build.profiles.active@,
+      pm-wechat-penetrate
+
+    #pom中定义config-server的配置, 在property key 的 “ spring.cloud.config ” 的下面
+    @spring.cloud.config.uri@
+    @spring.cloud.config.discovery.service-id@
+    @spring.cloud.config.discovery.enabled@
+
+logging:
+  level:
+    ROOT: "@logging.level.major.root@"
+    STDOUT: "@logging.level.major.stdout@"

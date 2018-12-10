@@ -1,0 +1,38 @@
+server:
+  #见 io.undertow.Undertow.Builder
+  undertow:
+    direct-buffers: true
+#ribbon配置，见 com.netflix.client.config.DefaultClientConfigImpl
+#远程调用时会更具请求的方法进行判断，见 FeignLoadBalancer#getRequestSpecificRetryHandler
+ribbon:
+  #请求处理的超时时间 (毫秒)，默认5000
+  ReadTimeout: 60000
+  #对当前实例的重试次数，默认0，总次数: (MaxAutoRetries + 1) x (MaxAutoRetriesNextServer + 1)
+  MaxAutoRetries: 0
+  #对集群的下个实例的重试次数，默认1
+  MaxAutoRetriesNextServer: 1
+
+hystrix:
+  command:
+    default:
+      execution:
+        #断路器处理的超时时间 (毫秒), 大于等于 ribbon.ReadTimeout
+        isolation.thread.timeoutInMilliseconds: 60000
+        timeout.enabled: false
+  #HystrixThreadPoolProperties
+  threadpool:
+    default:
+      #HystrixConcurrencyStrategy
+      allowMaximumSizeToDivergeFromCoreSize: true
+      maximumSize: 40
+      coreSize: 20
+
+#开启feign调用hystrix断路器
+feign.hystrix.enabled: true
+
+info:
+  app:
+    name: ${spring.application.name}
+    version: '@project.version@'
+    project: '@current.project.name@'
+    description: This is ${spring.application.name} server

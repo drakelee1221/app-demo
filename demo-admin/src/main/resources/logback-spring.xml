@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="600 seconds">
+  <springProperty scope="context" name="ROOT_LEVEL" source="logging.level.ROOT" />
+  <springProperty scope="context" name="STDOUT_LEVEL" source="logging.level.STDOUT" />
+  <property name="FILE_NAME"
+            value="${user.home}/logs/${app.short.name}/${app.short.name}-${server.port}" />
+
+  <appender name="ROLLING"
+            class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <Filter class="com.base.components.common.log.BaseLogFilter">
+      <name>ROLLING</name>
+      <topLevel>${ROOT_LEVEL}</topLevel>
+    </Filter>
+    <file>${FILE_NAME}.txt</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <!-- rollover daily -->
+      <fileNamePattern>
+        ${FILE_NAME}-%d{yyyy-MM-dd}.%i.log
+      </fileNamePattern>
+      <timeBasedFileNamingAndTriggeringPolicy
+          class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+        <!-- or whenever the file size reaches 100MB -->
+        <maxFileSize>30MB</maxFileSize>
+      </timeBasedFileNamingAndTriggeringPolicy>
+      <maxHistory>30</maxHistory>
+    </rollingPolicy>
+    <encoder>
+      <charset>UTF-8</charset>
+      <pattern>
+        [${server.port:--}] [%d{yyyy-MM-dd HH:mm:ss.SSS}] [${app.short.name:--}] [%level] [%X{X-B3-TraceId:-}] [%X{X-B3-SpanId:-}] [%X{X-Span-Export:-}] [%thread] [%logger{36}] - %msg%n
+      </pattern>
+    </encoder>
+  </appender>
+
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <Filter class="com.base.components.common.log.BaseLogFilter" >
+      <name>STDOUT</name>
+      <topLevel>${STDOUT_LEVEL}</topLevel>
+    </Filter>
+    <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+      <charset>UTF-8</charset>
+      <layout class="com.base.components.common.log.CustomPatternLayout">
+        <pattern>
+          [${server.port:--}] [%d{yyyy-MM-dd HH:mm:ss.SSS}] [${app.short.name:--}] %highlight([%level]) [%X{X-B3-TraceId:-}] [%X{X-B3-SpanId:-}] [%X{X-Span-Export:-}] [%thread] [%logger{36}] - %highlight(%msg) %n%red(%ex)
+        </pattern>
+      </layout>
+    </encoder>
+  </appender>
+
+  <logger name="com.drakelee.demo" level="${ROOT_LEVEL}" />
+  <logger name="com.zaxxer.hikari" level="info" />
+
+  <!--log4jdbc 打印全部SQL（debug=全部打印，warn=慢SQL）-->
+  <logger name="jdbc.sqltiming" level="warn" />
+  <logger name="jdbc.sqlonly" level="off" />
+  <logger name="jdbc.audit" level="off" />
+  <logger name="jdbc.resultset" level="error" />
+  <logger name="jdbc.connection" level="error" />
+
+  <logger name="org.eclipse" level="error" />
+  <!-- base framework -->
+  <logger name="org.springframework" level="info" />
+  <logger name="org.apache.http" level="info" />
+
+  <!--spring cloud -->
+  <logger name="com.netflix.ribbon" level="info" />
+  <logger name="com.netflix.discovery" level="info" />
+  <logger name="com.netflix.discovery.shared.transport.decorator.RedirectingEurekaHttpClient" level="OFF" />
+  <logger name="com.netflix.loadbalancer.BaseLoadBalancer" level="WARN" />
+  <logger name="com.netflix.loadbalancer.DynamicServerListLoadBalancer" level="WARN" />
+  <logger name="com.netflix.loadbalancer.ZoneAffinityServerListFilter" level="INFO" />
+  <logger name="org.springframework.beans.factory.support.DefaultListableBeanFactory" level="WARN" />
+  <logger name="com.netflix.hystrix.AbstractCommand" level="INFO" />
+
+  <logger name="java.sql.Connection" level="info" />
+  <logger name="java.sql.Statement" level="info" />
+  <logger name="java.sql.PreparedStatement" level="info" />
+  <logger name="java.sql.ResultSet" level="info" />
+
+  <logger name="org.mybatis.spring" level="${ROOT_LEVEL}" />
+  <logger name="com.ibatis" level="${ROOT_LEVEL}" />
+  <logger name="com.ibatis.common.jdbc.SimpleDataSource" level="info" />
+  <logger name="com.ibatis.common.jdbc.ScriptRunner" level="info" />
+  <logger name="com.ibatis.sqlmap.engine.impl.SqlMapClientDelegate"
+          level="info" />
+  <logger name="org.springframework.web.servlet.mvc.method.annotation.HttpEntityMethodProcessor"
+          level="info" />
+
+  <logger name="org.apache.activemq" level="INFO" />
+  <logger name="org.apache.activemq.spring" level="WARN" />
+  <logger name="org.apache.commons.beanutils" level="WARN" />
+  <logger name="io.lettuce" level="INFO" />
+
+  <!--zipkin 报告日志，屏蔽warn-->
+  <logger name="zipkin.reporter.AsyncReporter" level="ERROR" />
+
+  <!--JPA -->
+  <logger name="org.hibernate" level="INFO" />
+  <logger name="org.hibernate.hql.internal.ast.QueryTranslatorImpl" level="WARN" />
+  <logger name="org.hibernate.loader.Loader" level="WARN" />
+  <logger name="org.hibernate.engine.internal.TwoPhaseLoad" level="WARN" />
+  <logger name="org.hibernate.SQL" level="WARN" />
+  <logger name="org.hibernate.jpa.criteria.CriteriaQueryImpl" level="WARN" />
+  <logger name="org.hibernate.engine.transaction.TransactionImpl" level="WARN" />
+  <logger name="org.hibernate.loader.plan.build.spi.LoadPlanTreePrinter" level="WARN" />
+  <logger name="org.hibernate.persister.walking.spi.MetamodelGraphWalker" level="WARN" />
+  <logger name="org.hibernate.loader.entity.plan.EntityLoader" level="WARN" />
+  <logger name="org.hibernate.event" level="INFO" />
+  <logger name="org.hibernate.engine" level="INFO" />
+  <logger name="org.hibernate.query" level="INFO" />
+  <logger name="org.hibernate.internal" level="INFO" />
+
+  <logger name="org.elasticsearch.script" level="INFO" />
+  <logger name="org.elasticsearch.common.network" level="INFO" />
+  <logger name="org.springframework.boot.actuate.elasticsearch.ElasticsearchHealthIndicator" level="ERROR" />
+
+  <!--freemaker,shiro-->
+  <logger name="org.apache.shiro" level="WARN" />
+  <logger name="freemarker" level="WARN" />
+
+  <logger name="io.undertow.request" level="INFO" />
+  <logger name="io.undertow.session" level="INFO" />
+  <logger name="io.netty" level="INFO" />
+
+  <logger name="com.codingapi" level="WARN" />
+  <logger name="de.codecentric.boot.admin" level="WARN" />
+  <logger name="springfox" level="ERROR" />
+
+  <root level="${ROOT_LEVEL}">
+    <appender-ref ref="ROLLING" />
+    <appender-ref ref="STDOUT" />
+  </root>
+</configuration>

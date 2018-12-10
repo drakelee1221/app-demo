@@ -1,0 +1,43 @@
+/*!
+ * Fancytree "bootstrap" skin (highlighting the node span instead of title-only).
+ *
+ * DON'T EDIT THE CSS FILE DIRECTLY, since it is automatically generated from
+ * the LESS templates.
+ */
+/*******************************************************************************
+ * Common Styles for Fancytree Skins.
+ *
+ * This section is automatically generated from the `skin-common.less` template.
+ ******************************************************************************/
+/*------------------------------------------------------------------------------
+ * Helpers
+ *----------------------------------------------------------------------------*/
+.ui-helper-hidden {
+    display: none;
+}
+
+/*------------------------------------------------------------------------------
+ * Container and UL / LI
+ *----------------------------------------------------------------------------*/
+ul.fancytree-container {
+    font-family: "no value";
+    font-size: medium;
+    /*border: 0px none transparent;*/
+    /*background-color: white;*/
+}
+
+span.fancytree-custom-icon {
+    width: 1em;
+    height: 1em;
+    margin-left: 0.5em;
+    margin-top: 1px;
+    vertical-align: top;
+    border-style: none;
+}
+
+span.fancytree-icon,
+span.fancytree-checkbox,
+span.fancytree-radio,
+span.fancytree-custom-icon {
+    cursor: default;
+}

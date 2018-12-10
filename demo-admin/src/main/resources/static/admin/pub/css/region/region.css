@@ -1,0 +1,29 @@
+.region-tree .fancytree-custom-icon{
+	vertical-align:baseline;
+}
+.region-tree .fa-map{
+	color: #23b7e5
+}
+.region-tree .fa-map-marker{
+	color:#449d44
+}
+.region-tree .ui-state-disabled .fancytree-custom-icon{
+	color:#666
+}
+.region-tree .ui-state-disabled .fancytree-title{
+	color:#666
+}
+.region-tree span.fancytree-node.fancytree-active span.fancytree-title{
+	color:#fff
+}
+.region-tree span.fancytree-node.fancytree-selected span.fancytree-title{
+	color:#fff
+}
+.region-tree .fancytree-container.fancytree-treefocus span.fancytree-node.fancytree-active.fancytree-selected span.fancytree-title{
+	color: #fff
+}
+.region-tree>ul{
+	border: 1px solid #ccc;
+	background: #f5f5f5;
+	z-index:999
+}

@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.drakelee.app</groupId>
+  <artifactId>demo</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>${project.artifactId}</name>
+  <description>${project.artifactId} parent project</description>
+
+  <properties>
+    <!-- 必要配置 -->
+    <config.prefix.name>demo</config.prefix.name>
+    <current.project.name>demo</current.project.name>
+  </properties>
+
+  <modules>
+    <module>support</module>
+    <module>domain</module>
+    <module>common</module>
+    <module>database</module>
+    <module>cache</module>
+    <module>feign</module>
+    <module>elasticsearch</module>
+
+    <module>demo-zuul</module>
+    <module>demo-pm</module>
+    <module>demo-admin</module>
+  </modules>
+
+  <parent>
+    <groupId>com.drakelee.base</groupId>
+    <artifactId>common-dependencies</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+  </parent>
+
+
+  <profiles>
+    <profile>
+      <id>dev</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <properties>
+        <build.profiles.active>dev</build.profiles.active>
+        <!--actuator -->
+        <base.actuator.user.name>center_eureka</base.actuator.user.name>
+        <!--  super-admin-dev_hqgy  -->
+        <base.actuator.user.password>{cipher}91a2903947b6c345b27cf7094e43f5394b3619f3bded84c272b79a19b687a081714482c7d13f529a2cb6ee6d59f78825</base.actuator.user.password>
+        <eureka.zones.default>
+          http://${dollar}{actuator.user.name}:${dollar}{actuator.user.password}@peer1:8761/eureka/,
+          http://${dollar}{actuator.user.name}:${dollar}{actuator.user.password}@peer2:8762/eureka/,
+          http://${dollar}{actuator.user.name}:${dollar}{actuator.user.password}@peer3:8763/eureka/
+        </eureka.zones.default>
+        <git.branches>master</git.branches>
+        <skip.test>true</skip.test>
+        <!--应用调用分组标签，会影响RPC和网关的调用， 见 GroupMarkFilterEurekaRibbonRule-->
+        <rpc.groupTagFilterRuleTags>${current.project.name}-v${project.version}</rpc.groupTagFilterRuleTags>
+        <!--配置服务器ID，默认为eureka-server，若修改为 config-server 则需要启动 config-server -->
+        <config-server-id>eureka-server</config-server-id>
+
+        <!-- 是否使用远程config-server，false=本地，true=远程 -->
+        <config-server-remote>true</config-server-remote>
+        <!--需要本地特殊端口时使用-->
+        <!--<spring.cloud.config.uri>uri: http://localhost:18888/config</spring.cloud.config.uri>-->
+        <spring.cloud.config.uri/>
+        <spring.cloud.config.discovery.service-id>discovery.service-id: ${config-server-id}</spring.cloud.config.discovery.service-id>
+        <spring.cloud.config.discovery.enabled>discovery.enabled: ${config-server-remote}</spring.cloud.config.discovery.enabled>
+
+
+        <!--log level-->
+        <logging.level.major.root>DEBUG</logging.level.major.root>
+        <logging.level.major.stdout>DEBUG</logging.level.major.stdout>
+        <logging.level.minor.root>INFO</logging.level.minor.root>
+        <logging.level.minor.stdout>INFO</logging.level.minor.stdout>
+      </properties>
+    </profile>
+    <profile>
+      <id>prod</id>
+      <properties>
+        <build.profiles.active>prod</build.profiles.active>
+        <!--actuator -->
+        <base.actuator.user.name>center_eureka</base.actuator.user.name>
+        <!--  super-admin-dev_hqgy  -->
+        <base.actuator.user.password>{cipher}91a2903947b6c345b27cf7094e43f5394b3619f3bded84c272b79a19b687a081714482c7d13f529a2cb6ee6d59f78825</base.actuator.user.password>
+        <eureka.zones.default>
+          http://${dollar}{actuator.user.name}:${dollar}{actuator.user.password}@peer1:8761/eureka/,
+          http://${dollar}{actuator.user.name}:${dollar}{actuator.user.password}@peer2:8762/eureka/,
+          http://${dollar}{actuator.user.name}:${dollar}{actuator.user.password}@peer3:8763/eureka/
+        </eureka.zones.default>
+        <git.branches>master</git.branches>
+        <skip.test>true</skip.test>
+        <!--应用调用分组标签，会影响RPC和网关的调用， 见 GroupMarkFilterEurekaRibbonRule-->
+        <rpc.groupTagFilterRuleTags>${current.project.name}-v${project.version}</rpc.groupTagFilterRuleTags>
+        <!--配置服务器ID，默认为eureka-server，若修改为 config-server 则需要启动 config-server -->
+        <config-server-id>eureka-server</config-server-id>
+
+        <!-- 是否使用远程config-server，false=本地，true=远程 -->
+        <config-server-remote>true</config-server-remote>
+        <!--需要本地特殊端口时使用-->
+        <!--<spring.cloud.config.uri>uri: http://localhost:18888/config</spring.cloud.config.uri>-->
+        <spring.cloud.config.uri/>
+        <spring.cloud.config.discovery.service-id>discovery.service-id: ${config-server-id}</spring.cloud.config.discovery.service-id>
+        <spring.cloud.config.discovery.enabled>discovery.enabled: ${config-server-remote}</spring.cloud.config.discovery.enabled>
+
+        <!--log level-->
+        <logging.level.major.root>INFO</logging.level.major.root>
+        <logging.level.major.stdout>OFF</logging.level.major.stdout>
+        <logging.level.minor.root>ERROR</logging.level.minor.root>
+        <logging.level.minor.stdout>OFF</logging.level.minor.stdout>
+      </properties>
+    </profile>
+    <profile>
+      <id>test</id>
+      <properties>
+        <build.profiles.active>test</build.profiles.active>
+        <!--actuator -->
+        <base.actuator.user.name>center_eureka</base.actuator.user.name>
+        <!--  super-admin-dev_hqgy  -->
+        <base.actuator.user.password>{cipher}91a2903947b6c345b27cf7094e43f5394b3619f3bded84c272b79a19b687a081714482c7d13f529a2cb6ee6d59f78825</base.actuator.user.password>
+        <eureka.zones.default>
+          http://${dollar}{actuator.user.name}:${dollar}{actuator.user.password}@peer1:8761/eureka/,
+          http://${dollar}{actuator.user.name}:${dollar}{actuator.user.password}@peer2:8762/eureka/,
+          http://${dollar}{actuator.user.name}:${dollar}{actuator.user.password}@peer3:8763/eureka/
+        </eureka.zones.default>
+        <git.branches>master</git.branches>
+        <skip.test>true</skip.test>
+        <!--应用调用分组标签，会影响RPC和网关的调用， 见 GroupMarkFilterEurekaRibbonRule-->
+        <rpc.groupTagFilterRuleTags>${current.project.name}-v${project.version}</rpc.groupTagFilterRuleTags>
+        <!--配置服务器ID，默认为eureka-server，若修改为 config-server 则需要启动 config-server -->
+        <config-server-id>eureka-server</config-server-id>
+
+        <!-- 是否使用远程config-server，false=本地，true=远程 -->
+        <config-server-remote>true</config-server-remote>
+        <!--需要本地特殊端口时使用-->
+        <!--<spring.cloud.config.uri>uri: http://localhost:18888/config</spring.cloud.config.uri>-->
+        <spring.cloud.config.uri/>
+        <spring.cloud.config.discovery.service-id>discovery.service-id: ${config-server-id}</spring.cloud.config.discovery.service-id>
+        <spring.cloud.config.discovery.enabled>discovery.enabled: ${config-server-remote}</spring.cloud.config.discovery.enabled>
+
+        <!--log level-->
+        <logging.level.major.root>INFO</logging.level.major.root>
+        <logging.level.major.stdout>ERROR</logging.level.major.stdout>
+        <logging.level.minor.root>ERROR</logging.level.minor.root>
+        <logging.level.minor.stdout>ERROR</logging.level.minor.stdout>
+      </properties>
+    </profile>
+  </profiles>
+
+
+  <build>
+    <!--declares maven building resources-->
+    <resources>
+      <resource>
+        <directory>src/main/resources/</directory>
+        <filtering>true</filtering>
+        <includes>
+          <include>*.xml</include>
+          <include>*.yml</include>
+          <include>*.txt</include>
+          <include>**/*.xml</include>
+          <include>**/*.yml</include>
+          <include>**/*.ftl</include>
+          <include>**/*.groovy</include>
+        </includes>
+      </resource>
+      <resource>
+        <directory>src/main/resources/</directory>
+        <filtering>false</filtering>
+        <includes>
+          <include>**.json</include>
+          <include>log4jdbc.properties</include>
+          <include>**.datx</include>
+          <include>**.properties</include>
+          <include>static/**</include>
+          <include>**/*.zip</include>
+          <include>**/*.docx</include>
+        </includes>
+      </resource>
+    </resources>
+
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <configuration>
+          <useDefaultDelimiters>false</useDefaultDelimiters>
+          <encoding>UTF-8</encoding>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <repositories>
+    <repository>
+      <id>drakelee-base-mvn-repo</id>
+      <name>drakelee-base-mvn-repo</name>
+      <url>https://raw.githubusercontent.com/drakelee1221/base-mvn-repo/master/repository/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
+      </snapshots>
+    </repository>
+  </repositories>
+</project>

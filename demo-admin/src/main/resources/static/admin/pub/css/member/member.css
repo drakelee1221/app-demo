@@ -1,0 +1,40 @@
+.member-tree .fancytree-custom-icon{
+	vertical-align:baseline;
+}
+.member-tree .fa-user{
+	color:#31b0d5
+}
+.member-tree .fa-group{
+	color:#449d44
+}
+.member-tree .ui-state-disabled .fancytree-custom-icon{
+	color:#666
+}
+.member-tree .ui-state-disabled .fancytree-title{
+	color:#666
+}
+.member-tree span.fancytree-node.fancytree-active span.fancytree-title{
+	color:#fff
+}
+.member-tree span.fancytree-node.fancytree-selected span.fancytree-title{
+	color:#fff
+}
+.member-tree .fancytree-container.fancytree-treefocus span.fancytree-node.fancytree-active.fancytree-selected span.fancytree-title{
+	color: #fff
+}
+.member-tree>ul{
+	border: 1px solid #ccc;
+	background: #f5f5f5;
+	z-index:999
+}
+.member-tree.checkbox-tree span.fancytree-node.fancytree-selected.directory span.fancytree-title{
+	background-color: #449d44 !important;
+	border-color: #fff !important;;
+}
+.member-tree.checkbox-tree span.fancytree-node.fancytree-selected.item span.fancytree-title{
+	background-color: #49a6d5 !important;
+	border-color: #fff !important;;
+}
+.member-tree.checkbox-tree span.fancytree-node.fancytree-active.fancytree-selected span.fancytree-title{
+	color: #ffffff !important;;
+}
